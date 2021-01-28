@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'nested-admin',
+    'dj_rest_auth',
+
+    # My_Apps
     'blog.apps.BlogConfig'
 ]
 
