@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('dj_rest_auth.urls')),
     path('nested_admin/', include('nested_admin.urls')),
-    path("api/", include("blog.urls"))
+    path("api/", include("blog.urls")),
+    # path("api/user/", include("users.urls"))
 ]
