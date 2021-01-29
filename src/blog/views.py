@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework import generics
 from rest_framework.response import Response
 from .models import Category, Post, PostView, Comment, Like
-from .serializers import CategorySerializer, CommentCreateSerializer, PostListSerializer, PostDetailSerializer, PostCreateUpdateSerializer, CommentSerializer
+from .serializers import CategorySerializer, CommentCreateSerializer, PostListSerializer, PostDetailSerializer, PostCreateUpdateSerializer, CommentSerializer, LikeCreateSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from .permissions import IsOwner
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
@@ -59,7 +59,7 @@ class PostDelete(generics.DestroyAPIView):
     lookup_field = "slug"
     permission_classes = [IsAuthenticated]
 
-class CommentCreate(generics.CreateAPIView):
+class CreateCommentAPI(generics.CreateAPIView):
     serializer_class = CommentCreateSerializer
     queryset = Comment.objects.all()
     lookup_field = "slug"
@@ -84,3 +84,19 @@ class CommentCreate(generics.CreateAPIView):
     #     title = self.kwargs["title"]
     #     queryset = queryset.filter(quiz__title=title)
     #     return queryset
+
+class CreateLikeAPI(generics.CreateAPIView):
+    serializer_class = LikeCreateSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, slug):
+        post = get_object_or_404(Post, slug=slug)
+        like_qs = Like.objects.filter(user=request.user, post=post)
+        if like_qs.exists():
+            like_qs[0].delete()
+        else:
+            Like.objects.create(user=request.user, post=post)
+        data = {
+            "messages": 'like'
+        }
+        return Response(data)

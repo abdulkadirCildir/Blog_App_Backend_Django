@@ -14,14 +14,10 @@ class CategorySerializer(serializers.ModelSerializer):
             # "categories"
         )
 
-# class LikeSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Like
-#         fields = (
-#             "id",
-#             "user",
-#             "post"
-#         )
+class LikeCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['like_count']
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
@@ -123,6 +119,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='post_update', lookup_field='slug')
     delete_url = serializers.HyperlinkedIdentityField(view_name='post_delete', lookup_field='slug')
     create_comment_url = serializers.HyperlinkedIdentityField(view_name='create_comment', lookup_field='slug')
+    like_url = serializers.HyperlinkedIdentityField(view_name='post_like',lookup_field='slug')
     author = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     has_liked = serializers.SerializerMethodField()
@@ -136,6 +133,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
             "update_url",
             "delete_url",
             "create_comment_url",
+            "like_url",
             "has_liked",
             "owner",
             "title",

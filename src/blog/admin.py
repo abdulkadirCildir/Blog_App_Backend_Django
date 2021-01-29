@@ -19,7 +19,7 @@ class BlogAdmin(nested_admin.NestedModelAdmin):
     model = Category
     inlines = [PostInline]
 
-admin.site.register(Category)
+admin.site.register(Category, BlogAdmin)
 admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(Like)
